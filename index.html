@@ -332,6 +332,79 @@
     }
     .restart-row { text-align: center; }
 
+    /* ════════════════════════════════
+       SCREEN 2.5 — CASE INTRO
+    ════════════════════════════════ */
+    #s-case {
+      background: var(--db2); color: var(--wh); flex-direction: column;
+    }
+    .case-topbar {
+      background: var(--db); padding: .9rem 1.6rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .case-topbar .ctag {
+      background: var(--or); color: var(--wh);
+      font-size: .75rem; font-weight: 700;
+      padding: .2rem .7rem; border-radius: 3px; white-space: nowrap;
+    }
+    .case-topbar .ctitle { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .skip-btn {
+      background: transparent; border: 1px solid rgba(255,255,255,.3);
+      color: var(--mg); font-family: inherit; font-size: .82rem;
+      padding: .3rem .9rem; border-radius: 20px; cursor: pointer;
+      white-space: nowrap; transition: border-color .15s, color .15s;
+    }
+    .skip-btn:hover { border-color: var(--or); color: var(--or); }
+    .case-body {
+      padding: 1.8rem 2rem; max-width: 840px; margin: 0 auto;
+      width: 100%; flex: 1;
+    }
+    .case-lead {
+      font-size: 1.05rem; line-height: 1.85; color: var(--lb);
+      margin-bottom: 1.8rem; border-left: 4px solid var(--or);
+      padding-left: 1rem;
+    }
+    .case-section-title {
+      font-size: .72rem; letter-spacing: .13em; color: var(--or);
+      text-transform: uppercase; margin-bottom: .8rem; font-weight: 700;
+    }
+    .timeline { margin-bottom: 1.8rem; }
+    .tl-item {
+      display: flex; gap: 1rem; margin-bottom: .6rem; align-items: flex-start;
+    }
+    .tl-dot-wrap {
+      display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+    }
+    .tl-dot {
+      width: 11px; height: 11px; border-radius: 50%;
+      background: var(--or); margin-top: .35rem; flex-shrink: 0;
+    }
+    .tl-dot.red { background: var(--red); }
+    .tl-line {
+      width: 2px; flex: 1; background: rgba(255,255,255,.12);
+      min-height: 12px; margin-top: 2px;
+    }
+    .tl-date {
+      font-size: .78rem; color: var(--or); font-weight: 700;
+      white-space: nowrap; min-width: 120px; margin-top: .3rem;
+    }
+    .tl-text { font-size: .9rem; line-height: 1.6; color: var(--lb); padding-top: .25rem; }
+    .parties-grid {
+      display: flex; gap: .7rem; flex-wrap: wrap; margin-bottom: 1.8rem;
+    }
+    .party-chip {
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 7px; padding: .7rem .9rem; flex: 1; min-width: 180px;
+    }
+    .party-name { font-size: .88rem; font-weight: 700; margin-bottom: .2rem; }
+    .party-role { font-size: .78rem; color: var(--mg); line-height: 1.4; }
+    .party-note { font-size: .75rem; color: var(--or); margin-top: .3rem; }
+    .case-footer {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 1.2rem 2rem; display: flex;
+      justify-content: flex-end; gap: 1rem;
+    }
+
     /* ── UTILITY ── */
     .or  { color: var(--or); }
     .red { color: var(--red); }
@@ -416,6 +489,80 @@
   </div>
 
   <p class="mg mt3" style="font-size:.82rem">選擇任何角色，決策情境都相同。角色只影響你的觀察視角。</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2.5 — CASE INTRO
+══════════════════════════════════════════ -->
+<div class="screen" id="s-case">
+  <div class="case-topbar">
+    <span class="ctag">案例介紹</span>
+    <span class="ctitle">太魯閣號 0402 事故</span>
+    <button class="skip-btn" onclick="startGame()">已熟悉，略過 →</button>
+  </div>
+
+  <div class="case-body">
+    <p class="case-lead">
+      2021 年 4 月 2 日，台鐵 408 次太魯閣號自強號行經花蓮清水隧道北口，
+      撞上一台滑落至鐵軌的工程車輛，造成 <strong>49 人罹難、213 人受傷</strong>，
+      是台灣 40 年來最嚴重的鐵路事故。<br><br>
+      這不只是一場意外。事後調查顯示，
+      在撞擊發生之前，有 5 個關鍵時刻，每一個都有機會阻止悲劇——
+      而每一個都因為溝通管理的失敗而錯過了。
+    </p>
+
+    <div class="case-section-title">事發經過</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div><div class="tl-date">2021.01</div><div class="tl-text">施工便道上一台混凝土車卡陷，顯示地面未按規定鋪設青混凝土。事件被記錄在督導報告中，但無人要求改善。</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div><div class="tl-date">2021.03.31</div><div class="tl-text">清明連假前一天，台鐵工程司透過 LINE 群組發送停工通知，要求連假期間停止所有施工。包商李義祥回覆了表情符號，沒有人確認執行情況。</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div><div class="tl-date">2021.04.02 清晨</div><div class="tl-text">李義祥帶領越南籍移工華文好進入現場作業。一台工程車輛因故熄火，停在邊坡施工便道上。</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot red"></div><div class="tl-line"></div></div>
+        <div><div class="tl-date">09:28</div><div class="tl-text">李義祥試圖拖動工程車，車輛失控滑落至鐵軌上。現場沒有任何緊急通報台鐵行車調度的機制。</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot-wrap"><div class="tl-dot red"></div></div>
+        <div><div class="tl-date">09:28 +7 秒</div><div class="tl-text">太魯閣號以 123 km/h 速度撞上工程車殘骸。49 人罹難，213 人受傷。</div></div>
+      </div>
+    </div>
+
+    <div class="case-section-title">主要當事人</div>
+    <div class="parties-grid">
+      <div class="party-chip">
+        <div class="party-name">李義祥</div>
+        <div class="party-role">工地主任、義祥工業社負責人（包商）<br>實際操作工程車、帶工人入場</div>
+        <div class="party-note">二審判刑 12 年 6 月，目前發回更審</div>
+      </div>
+      <div class="party-chip">
+        <div class="party-name">潘堂益</div>
+        <div class="party-role">台鐵花工段工程司（公務員）<br>負責監督工程合約執行</div>
+        <div class="party-note">一審判刑 8 年 10 月，全案最重</div>
+      </div>
+      <div class="party-chip">
+        <div class="party-name">三個督導單位</div>
+        <div class="party-role">台鐵花工段、聯合大地監造廠商、中棪工程顧問<br>5 次查核均未指出施工便道缺失</div>
+        <div class="party-note">各自以為其他單位在追蹤問題</div>
+      </div>
+      <div class="party-chip">
+        <div class="party-name">華文好</div>
+        <div class="party-role">越南籍移工，協助拖動工程車</div>
+        <div class="party-note">三審均判無罪確定（因果關係不足）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-footer">
+    <button class="btn btn-or" onclick="startGame()">了解了，開始模擬 →</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -735,6 +882,10 @@ function show(id) {
 
 function selectRole(role) {
   state.role = role;
+  show('s-case');
+}
+
+function startGame() {
   renderMoment(0);
   show('s-moment');
 }
