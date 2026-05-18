@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>太魯閣號 0402 ── 溝通管理決策模擬</title>
+  <style>
+    :root {
+      --db:    #1B3A6B;
+      --db2:   #0E2142;
+      --or:    #E8831A;
+      --red:   #C0392B;
+      --lred:  #FAD7D1;
+      --wh:    #FFFFFF;
+      --lb:    #EBF0F8;
+      --dt:    #2D3748;
+      --grn:   #276E48;
+      --abl:   #2D6DB5;
+      --mg:    #8A9BB0;
+      --lgray: #F2F4F8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', 'PingFang TC', sans-serif;
+      background: var(--db);
+      color: var(--wh);
+      min-height: 100vh;
+    }
+    .screen { display: none; min-height: 100vh; flex-direction: column; }
+    .screen.active { display: flex; animation: fadeIn .45s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      border: none; border-radius: 5px; cursor: pointer;
+      font-family: inherit; font-weight: 700; letter-spacing: .03em;
+      transition: filter .18s, transform .12s;
+    }
+    .btn:hover  { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn-or  { background: var(--or);  color: var(--wh); padding: .9rem 2rem; font-size: 1rem; }
+    .btn-db  { background: var(--db);  color: var(--wh); padding: .75rem 1.6rem; font-size: .95rem; }
+    .btn-wh  { background: var(--wh);  color: var(--db); padding: .75rem 1.6rem; font-size: .95rem; }
+
+    /* ════════════════════════════════
+       SCREEN 1 — INTRO
+    ════════════════════════════════ */
+    #s-intro {
+      background: var(--db);
+      align-items: center; justify-content: center;
+      text-align: center; padding: 2.5rem 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    #s-intro::before {
+      content: ''; position: absolute; left: 0; top: 0;
+      width: 7px; height: 100%; background: var(--or);
+    }
+    .intro-badge {
+      display: inline-block;
+      background: rgba(232,131,26,.15); border: 1px solid var(--or);
+      color: var(--or); font-size: .78rem; font-weight: 700;
+      letter-spacing: .12em; padding: .3rem .9rem; border-radius: 20px;
+      margin-bottom: 1.2rem; text-transform: uppercase;
+    }
+    .intro-title {
+      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-weight: 900; line-height: 1.05; margin-bottom: .4rem;
+    }
+    .intro-sub {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--or); font-weight: 700; margin-bottom: 1.6rem;
+    }
+    .stats-row {
+      display: flex; gap: 2.5rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-n {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900; color: var(--red); display: block; line-height: 1;
+    }
+    .stat-l { font-size: .82rem; color: var(--mg); margin-top: .2rem; }
+    .intro-desc {
+      max-width: 580px; color: var(--lb); line-height: 1.85;
+      font-size: .95rem; margin-bottom: 2rem;
+    }
+    .intro-hint { color: var(--mg); font-size: .82rem; margin-top: 1rem; }
+
+    /* ════════════════════════════════
+       SCREEN 2 — ROLE
+    ════════════════════════════════ */
+    #s-role {
+      background: var(--db2);
+      align-items: center; justify-content: center;
+      padding: 2.5rem 1.5rem; gap: 1.5rem;
+    }
+    .role-heading { font-size: 1.4rem; font-weight: 700; color: var(--or); text-align: center; }
+    .role-subhead { color: var(--mg); font-size: .88rem; text-align: center; }
+    .role-grid {
+      display: flex; gap: 1.1rem; flex-wrap: wrap;
+      justify-content: center; max-width: 860px;
+    }
+    .role-card {
+      background: var(--db); border: 2px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 1.6rem 1.2rem; width: 240px;
+      cursor: pointer; text-align: center;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .role-card:hover {
+      border-color: var(--or); transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .role-icon { font-size: 2.4rem; margin-bottom: .8rem; }
+    .role-name { font-size: 1.05rem; font-weight: 700; margin-bottom: .4rem; }
+    .role-desc { font-size: .82rem; color: var(--mg); line-height: 1.6; }
+
+    /* ════════════════════════════════
+       SCREEN 3 — MOMENT
+    ════════════════════════════════ */
+    #s-moment {
+      background: var(--wh); color: var(--dt);
+    }
+    .moment-topbar {
+      background: var(--db); padding: 1rem 1.6rem;
+      display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+    }
+    .mtag {
+      background: var(--or); color: var(--wh);
+      font-size: .75rem; font-weight: 700;
+      padding: .2rem .7rem; border-radius: 3px; white-space: nowrap;
+    }
+    .mtitle { font-size: 1.1rem; font-weight: 700; color: var(--wh); }
+    .prog-wrap { height: 5px; background: var(--lb); }
+    .prog-fill  { height: 100%; background: var(--or); transition: width .5s ease; }
+    .moment-body { padding: 1.8rem 2rem; max-width: 840px; margin: 0 auto; }
+    .m-date {
+      font-size: .75rem; color: var(--mg); letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: .4rem;
+    }
+    .m-scenario {
+      font-size: 1.35rem; font-weight: 700; color: var(--db);
+      margin-bottom: 1rem; line-height: 1.4;
+    }
+    .m-context {
+      background: var(--lb); border-left: 4px solid var(--abl);
+      padding: 1rem 1.2rem; border-radius: 0 5px 5px 0;
+      margin-bottom: 1.5rem; line-height: 1.75; font-size: .93rem;
+    }
+    .m-question {
+      font-size: 1rem; font-weight: 700; color: var(--db); margin-bottom: .9rem;
+    }
+    .choices { display: flex; flex-direction: column; gap: .7rem; }
+    .choice-btn {
+      background: var(--wh); border: 2px solid #D1D5DB;
+      border-radius: 7px; padding: 1rem 1.2rem;
+      text-align: left; cursor: pointer; font-family: inherit;
+      font-size: .92rem; color: var(--dt); transition: border-color .15s, background .15s;
+      line-height: 1.55;
+    }
+    .choice-btn:hover { border-color: var(--abl); background: var(--lb); }
+    .choice-btn.disabled { opacity: .45; cursor: not-allowed; }
+    .clabel { font-weight: 700; color: var(--abl); margin-right: .4rem; }
+
+    /* ════════════════════════════════
+       SCREEN 4 — CONSEQUENCE
+    ════════════════════════════════ */
+    #s-consequence { background: var(--db2); }
+    .con-topbar {
+      background: var(--db); padding: 1rem 1.6rem;
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .con-body { padding: 1.8rem 2rem; max-width: 840px; margin: 0 auto; }
+    .dots-row { display: flex; gap: .5rem; margin-bottom: 1.4rem; }
+    .dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+    }
+    .dot.active { background: var(--red); }
+    .dot.correct { background: var(--grn); }
+    .rbadge {
+      display: inline-block; padding: .3rem .9rem; border-radius: 20px;
+      font-size: .82rem; font-weight: 700; margin-bottom: .6rem;
+    }
+    .rbadge.correct { background: var(--grn); }
+    .rbadge.wrong   { background: var(--red); }
+    .rbadge.actual  { background: #7B3F00; }
+    .your-choice { font-size: .88rem; color: var(--lb); margin-bottom: 1.2rem; opacity: .8; }
+    .wh-label {
+      font-size: .72rem; letter-spacing: .12em; color: var(--or);
+      text-transform: uppercase; margin-bottom: .4rem;
+    }
+    .wh-text {
+      font-size: 1.1rem; font-weight: 700; line-height: 1.5; margin-bottom: 1rem;
+    }
+    .con-detail {
+      background: rgba(255,255,255,.07); border-radius: 6px;
+      padding: 1.1rem; margin-bottom: 1.2rem;
+      line-height: 1.8; font-size: .9rem; color: var(--lb);
+    }
+    .pmbok-pill {
+      display: inline-block; background: var(--or);
+      padding: .25rem .75rem; border-radius: 3px;
+      font-size: .75rem; font-weight: 700; margin-bottom: .5rem;
+    }
+    .pmbok-box {
+      border-left: 3px solid var(--or); padding: .85rem 1rem;
+      background: rgba(255,255,255,.05); margin-bottom: 1.6rem;
+      font-size: .88rem; line-height: 1.7; color: var(--lb);
+    }
+    .con-footer {
+      display: flex; justify-content: flex-end; padding: 1rem 2rem;
+      border-top: 1px solid rgba(255,255,255,.08); margin-top: auto;
+    }
+
+    /* ════════════════════════════════
+       SCREEN 5 — FINAL SCORE
+    ════════════════════════════════ */
+    #s-final {
+      background: var(--db2);
+      align-items: center; justify-content: flex-start;
+      padding: 2.5rem 1.5rem;
+    }
+    .final-eyebrow {
+      font-size: .8rem; letter-spacing: .12em; color: var(--or);
+      text-transform: uppercase; text-align: center; margin-bottom: .5rem;
+    }
+    .final-title {
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 900; text-align: center; margin-bottom: .3rem;
+    }
+    .score-big {
+      font-size: clamp(3rem, 10vw, 5rem);
+      font-weight: 900; text-align: center; line-height: 1; margin: .5rem 0;
+    }
+    .score-sublabel { color: var(--mg); text-align: center; font-size: .88rem; margin-bottom: 2rem; }
+    .score-msg {
+      max-width: 560px; text-align: center; margin: 0 auto 2rem;
+      font-size: .95rem; line-height: 1.75; color: var(--lb);
+    }
+    .layers-heading {
+      font-size: .85rem; letter-spacing: .1em; color: var(--or);
+      text-align: center; text-transform: uppercase; margin-bottom: .8rem;
+    }
+    .layers-list {
+      display: flex; flex-direction: column; gap: .5rem;
+      max-width: 680px; width: 100%; margin-bottom: 2rem;
+    }
+    .layer-row {
+      display: flex; align-items: flex-start; gap: .9rem;
+      background: rgba(255,255,255,.06); border-radius: 7px;
+      padding: .85rem 1rem; border-left: 4px solid var(--red);
+    }
+    .layer-circle {
+      background: var(--db); border: 2px solid var(--red);
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .78rem; flex-shrink: 0; color: var(--wh);
+    }
+    .layer-txt { font-size: .88rem; line-height: 1.5; }
+    .layer-pmbok { font-size: .75rem; color: var(--or); margin-top: .25rem; }
+    .final-btns {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    }
+
+    /* ════════════════════════════════
+       SCREEN 6 — PMBOK MAP
+    ════════════════════════════════ */
+    #s-pmbok {
+      background: var(--wh); color: var(--dt);
+      align-items: center; padding: 2.5rem 1.5rem;
+    }
+    .pmbok-title { font-size: 1.5rem; font-weight: 700; color: var(--db); text-align: center; margin-bottom: .3rem; }
+    .pmbok-sub { color: var(--mg); text-align: center; font-size: .88rem; margin-bottom: 2rem; }
+    .pmbok-grid {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      justify-content: center; max-width: 940px; margin-bottom: 2rem;
+    }
+    .pcard {
+      flex: 1; min-width: 255px; border-radius: 9px; overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 2px 12px rgba(0,0,0,.1);
+    }
+    .pcard-hdr {
+      padding: .85rem 1rem; font-weight: 700; font-size: .9rem; color: var(--wh);
+    }
+    .pcard-body {
+      background: var(--lgray); padding: 1rem;
+      font-size: .85rem; line-height: 1.75; color: var(--dt); flex: 1;
+    }
+    .pcard-fail {
+      background: var(--lred); padding: .75rem 1rem;
+      font-size: .82rem; color: var(--red); font-weight: 600;
+      border-top: 1px solid #f0b0a8; line-height: 1.5;
+    }
+    .pmbok-verdict {
+      max-width: 680px; background: var(--db); color: var(--wh);
+      border-radius: 8px; padding: 1.2rem 1.4rem; text-align: center;
+      font-size: .93rem; line-height: 1.8; margin-bottom: 2rem;
+    }
+    .pmbok-verdict strong { color: var(--or); }
+
+    /* ════════════════════════════════
+       SCREEN 7 — REFLECTION
+    ════════════════════════════════ */
+    #s-reflection {
+      background: var(--db);
+      align-items: center; padding: 2.5rem 1.5rem;
+    }
+    .ref-title { font-size: 1.4rem; font-weight: 700; color: var(--or); text-align: center; margin-bottom: .3rem; }
+    .ref-sub { color: var(--mg); text-align: center; font-size: .88rem; margin-bottom: 1.8rem; }
+    .qs-list { display: flex; flex-direction: column; gap: 1rem; max-width: 700px; width: 100%; margin-bottom: 2rem; }
+    .qcard {
+      background: rgba(255,255,255,.08); border-radius: 7px;
+      padding: 1.1rem 1.2rem; display: flex; gap: .9rem; align-items: flex-start;
+    }
+    .qnum {
+      background: var(--or); width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .82rem; flex-shrink: 0; color: var(--wh);
+    }
+    .qbody { flex: 1; }
+    .qtext { font-size: .93rem; line-height: 1.7; color: var(--lb); }
+    .qtarget { font-size: .75rem; color: var(--or); margin-top: .3rem; }
+    .verdict-bar {
+      max-width: 700px; width: 100%; background: var(--or);
+      border-radius: 7px; padding: 1rem 1.4rem; margin-bottom: 2rem;
+      font-size: .9rem; line-height: 1.7; color: var(--db); font-weight: 700;
+    }
+    .restart-row { text-align: center; }
+
+    /* ── UTILITY ── */
+    .or  { color: var(--or); }
+    .red { color: var(--red); }
+    .grn { color: #5ABBC3; }
+    .mg  { color: var(--mg); }
+    .bold { font-weight: 700; }
+    .mt1 { margin-top: .5rem; }
+    .mt2 { margin-top: 1rem; }
+    .mt3 { margin-top: 1.5rem; }
+
+    @media (max-width: 600px) {
+      .moment-body, .con-body { padding: 1.2rem 1rem; }
+      .role-card { width: 100%; }
+      .pmbok-grid { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1 — INTRO
+══════════════════════════════════════════ -->
+<div class="screen active" id="s-intro">
+  <div class="intro-badge">PMBOK CH11 ｜ 溝通管理決策模擬</div>
+  <div class="intro-title">太魯閣號<br>0402 事故</div>
+  <div class="intro-sub">如果當時你在那裡，你會做出不同的選擇嗎？</div>
+
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-n">49</span>
+      <div class="stat-l">人罹難</div>
+    </div>
+    <div class="stat">
+      <span class="stat-n">213</span>
+      <div class="stat-l">人受傷</div>
+    </div>
+    <div class="stat">
+      <span class="stat-n">7 秒</span>
+      <div class="stat-l">撞擊前預警時間</div>
+    </div>
+    <div class="stat">
+      <span class="stat-n">5 層</span>
+      <div class="stat-l">溝通失敗</div>
+    </div>
+  </div>
+
+  <p class="intro-desc">
+    2021 年 4 月 2 日清晨，台鐵 408 次太魯閣號行經花蓮清水隧道北口，
+    撞上一台滑落鐵軌的工程車，造成台鐵 40 年來最嚴重的事故。<br><br>
+    事故不是突然發生的。在那之前，有 5 個關鍵時刻，
+    每一個都有人做出了選擇——或者選擇了沉默。<br><br>
+    現在，<strong>換你來做這些選擇</strong>。
+  </p>
+
+  <button class="btn btn-or" onclick="show('s-role')">開始模擬 →</button>
+  <p class="intro-hint mt2">5 個決策點｜約 8 分鐘｜無正確答案的最後一關</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2 — ROLE
+══════════════════════════════════════════ -->
+<div class="screen" id="s-role">
+  <div class="role-heading">選擇你的角色</div>
+  <div class="role-subhead">不同角色看到的資訊不同，但每個人都有機會改變結局</div>
+
+  <div class="role-grid">
+    <div class="role-card" onclick="selectRole('engineer')">
+      <div class="role-icon">🏗️</div>
+      <div class="role-name">台鐵工程司</div>
+      <div class="role-desc">負責監督工程合約執行，在組織內擁有最直接的介入能力。你是最有機會阻止災難的人。</div>
+    </div>
+    <div class="role-card" onclick="selectRole('inspector')">
+      <div class="role-icon">📋</div>
+      <div class="role-name">外部督導員</div>
+      <div class="role-desc">代表業主查核施工現場，把異常轉化為行動是你的核心職責。你的報告，決定了風險是否被看見。</div>
+    </div>
+    <div class="role-card" onclick="selectRole('pm')">
+      <div class="role-icon">📐</div>
+      <div class="role-name">專案管理師</div>
+      <div class="role-desc">從溝通計畫設計到執行監控，你負責整個溝通系統的架構。系統的漏洞，從規劃就決定了。</div>
+    </div>
+  </div>
+
+  <p class="mg mt3" style="font-size:.82rem">選擇任何角色，決策情境都相同。角色只影響你的觀察視角。</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 3 — MOMENT
+══════════════════════════════════════════ -->
+<div class="screen" id="s-moment">
+  <div class="moment-topbar">
+    <span class="mtag" id="m-tag">失敗層 1/5</span>
+    <span class="mtitle" id="m-title">CH11 溝通管理決策點</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="moment-body">
+    <div class="m-date" id="m-date"></div>
+    <div class="m-scenario" id="m-scenario"></div>
+    <div class="m-context" id="m-context"></div>
+    <div class="m-question" id="m-question">你會採取哪個行動？</div>
+    <div class="choices" id="m-choices"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 4 — CONSEQUENCE
+══════════════════════════════════════════ -->
+<div class="screen" id="s-consequence">
+  <div class="con-topbar">
+    <span class="mtag" id="c-tag">失敗層 1/5</span>
+    <span class="mtitle" id="c-pmbok">CH11.2 管理溝通</span>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog-fill-c" style="width:0%"></div></div>
+
+  <div class="con-body">
+    <div class="dots-row" id="c-dots"></div>
+
+    <div id="c-badge" class="rbadge wrong">✗ 現實中的選擇更糟</div>
+    <div class="your-choice" id="c-yourchoice"></div>
+
+    <div class="wh-label">真實發生了什麼</div>
+    <div class="wh-text" id="c-whathappened"></div>
+
+    <div class="con-detail" id="c-detail"></div>
+
+    <div class="pmbok-pill" id="c-pmboktag">CH11.2 管理溝通</div>
+    <div class="pmbok-box" id="c-pmbokmsg"></div>
+  </div>
+
+  <div class="con-footer">
+    <button class="btn btn-or" id="c-next-btn" onclick="">繼續 →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 5 — FINAL SCORE
+══════════════════════════════════════════ -->
+<div class="screen" id="s-final">
+  <div class="final-eyebrow">模擬結束</div>
+  <div class="final-title">你做出了幾個有效的溝通決策？</div>
+  <div class="score-big" id="f-score">0 / 5</div>
+  <div class="score-sublabel" id="f-sublabel">正確決策數</div>
+  <div class="score-msg" id="f-msg"></div>
+
+  <div class="layers-heading">這個案例的 5 層溝通失敗</div>
+  <div class="layers-list">
+    <div class="layer-row">
+      <div class="layer-circle">1</div>
+      <div class="layer-txt">
+        <div><span class="or bold">LINE 停工令無確認機制</span> — 訊息發出後沒有驗證執行，承包商在連假期間違規進場施工</div>
+        <div class="layer-pmbok">CH11.2 管理溝通</div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-circle">2</div>
+      <div class="layer-txt">
+        <div><span class="or bold">1 月前車之鑑，有記錄無行動</span> — 混凝土車卡陷的異常被記錄，但從未觸發任何風險升級</div>
+        <div class="layer-pmbok">CH11.3 監視溝通</div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-circle">3</div>
+      <div class="layer-txt">
+        <div><span class="or bold">三個督導單位責任分散</span> — 每個單位都以為另外兩個在負責，等同於沒有人負責</div>
+        <div class="layer-pmbok">CH11.1 規劃溝通管理</div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-circle">4</div>
+      <div class="layer-txt">
+        <div><span class="or bold">沒有緊急通報台鐵的機制</span> — 工程合約中從未設計當施工區發生緊急事件時如何通知行車調度</div>
+        <div class="layer-pmbok">CH11.1 規劃溝通管理</div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-circle">5</div>
+      <div class="layer-txt">
+        <div><span class="or bold">四個系統的資訊孤島</span> — 台鐵、監造、工程顧問、地方政府各自為政，沒有整合資訊可以在那 7 秒發出警告</div>
+        <div class="layer-pmbok">跨機構溝通架構缺失</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="final-btns">
+    <button class="btn btn-or" onclick="show('s-pmbok')">CH11 框架對照 →</button>
+    <button class="btn btn-db" style="border:1px solid rgba(255,255,255,.2)" onclick="show('s-reflection')">課堂討論題</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 6 — PMBOK MAP
+══════════════════════════════════════════ -->
+<div class="screen" id="s-pmbok">
+  <div class="pmbok-title">用 PMBOK CH11 解剖這個案例</div>
+  <div class="pmbok-sub">三個流程缺口同時存在，每個都是必要的，但任何一個缺失都足以造成災難</div>
+
+  <div class="pmbok-grid">
+    <div class="pcard">
+      <div class="pcard-hdr" style="background:var(--red)">CH11.1　規劃溝通管理</div>
+      <div class="pcard-body">
+        <strong>應有的設計：</strong><br>
+        明確定義「誰在何時、透過什麼管道、通知誰、通知什麼事」——尤其是緊急狀況下的通報路徑。<br><br>
+        工程合約應包含：緊急通報對象、通報時間上限、責任歸屬，並由全體利害關係人確認簽核。
+      </div>
+      <div class="pcard-fail">
+        本案缺失：工程合約未設計任何緊急通報台鐵行車調度的機制。三個督導單位的責任邊界未明確定義。
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-hdr" style="background:var(--abl)">CH11.2　管理溝通</div>
+      <div class="pcard-body">
+        <strong>應有的設計：</strong><br>
+        溝通不只是「傳送訊息」，而是確認訊息被接收、理解、並產生對應的行動。<br><br>
+        停工令必須有書面確認回覆、有執行驗證機制，以及違反時的升級程序。
+      </div>
+      <div class="pcard-fail">
+        本案缺失：LINE 停工令沒有確認回覆機制，也沒有後續巡查驗證。停工令實質上形同虛設。
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-hdr" style="background:var(--grn)">CH11.3　監視溝通</div>
+      <div class="pcard-body">
+        <strong>應有的設計：</strong><br>
+        把「有記錄的異常」轉換成「有人要做決策的行動訊號」，並定義清楚的風險升級路徑。<br><br>
+        異常事件應被標記優先級，高風險缺失應自動觸發升級通知給有權決策者。
+      </div>
+      <div class="pcard-fail">
+        本案缺失：1月混凝土車卡陷被記錄但無升級，5次督導均未觸發任何改善要求。監視等同虛設。
+      </div>
+    </div>
+  </div>
+
+  <div class="pmbok-verdict">
+    事故調查報告顯示，<strong>每一層失敗都有記錄，但沒有任何一層記錄觸發了行動</strong>。<br>
+    溝通管理的失敗，不是因為沒有規定，而是因為規定從未被設計成一個<strong>能確保訊息到達正確的人、並產生行動的系統</strong>。
+  </div>
+
+  <div class="final-btns">
+    <button class="btn btn-db" onclick="show('s-reflection')">課堂討論題 →</button>
+    <button class="btn btn-wh" onclick="show('s-final')">← 回到結果</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 7 — REFLECTION
+══════════════════════════════════════════ -->
+<div class="screen" id="s-reflection">
+  <div class="ref-title">課堂討論</div>
+  <div class="ref-sub">以下問題沒有標準答案——你的工作經驗本身就是最好的教材</div>
+
+  <div class="qs-list">
+    <div class="qcard">
+      <div class="qnum">Q1</div>
+      <div class="qbody">
+        <div class="qtext">在你的組織裡，當緊急事件發生時，「誰要在幾分鐘內通知誰」有明確的設計嗎？如果沒有，最可能的原因是什麼？</div>
+        <div class="qtarget">🏢 在職生優先 ── 請分享真實經驗</div>
+      </div>
+    </div>
+    <div class="qcard">
+      <div class="qnum">Q2</div>
+      <div class="qbody">
+        <div class="qtext">台鐵以 LINE 發送停工通知，算是完成了「管理溝通」的責任嗎？根據 PMBOK 11.2，一個有效的溝通應該包含哪些要素？</div>
+        <div class="qtarget">🎓 應屆生也能參與 ── 用框架回答</div>
+      </div>
+    </div>
+    <div class="qcard">
+      <div class="qnum">Q3</div>
+      <div class="qbody">
+        <div class="qtext">三個監督單位都「以為是別人在查」——這種責任分散的問題，在敏捷團隊裡會不會發生？Scrum 的哪個機制可以防止這種情況？</div>
+        <div class="qtarget">🤝 兩者並重 ── PMBOK 與敏捷對照</div>
+      </div>
+    </div>
+    <div class="qcard">
+      <div class="qnum">Q4</div>
+      <div class="qbody">
+        <div class="qtext">審判結果顯示，台鐵工程司（公務員）的刑期反而最重，比直接肇事的包商還高。從專案治理的角度，你怎麼看這個判決？</div>
+        <div class="qtarget">🏢 在職生優先 ── 連結到組織責任設計</div>
+      </div>
+    </div>
+    <div class="qcard">
+      <div class="qnum">Q5</div>
+      <div class="qbody">
+        <div class="qtext">如果你是這個工程的專案管理師，在不增加太多成本的前提下，你最優先要設計的溝通機制是哪一個？為什麼？</div>
+        <div class="qtarget">🎓 應屆生也能參與 ── 設計與取捨</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict-bar">
+    💬 本案一句話：49 人罹難的太魯閣號事故，不是因為沒有規定——而是因為規定從未被設計成一套確保資訊到達正確的人、並產生行動的溝通系統。這，正是 PMBOK CH11 存在的理由。
+  </div>
+
+  <div class="restart-row">
+    <button class="btn btn-or" onclick="restart()">重新模擬 ↺</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+'use strict';
+
+const moments = [
+  {
+    num: 1,
+    tag: '失敗層 1／5',
+    pmbok: 'CH11.2 管理溝通',
+    date: '2021 年 3 月 31 日（清明連假前一天）',
+    scenario: '你是台鐵工程司。你剛透過 LINE 群組向包商發送了停工通知，要求清明連假期間完全停工。包商李義祥回覆了一個表情符號。',
+    context: '這條工程合約的緊急聯絡機制從未被明確設計過。目前對外溝通的唯一管道就是 LINE 群組。連假後你有其他要務，無法到現場巡視。',
+    question: '訊息已送出，你還需要做什麼？',
+    choices: [
+      { label: 'A', text: '確認對方已讀。這樣算是完成通知了，連假讓現場自行管理。', correct: false },
+      { label: 'B', text: '要求包商以書面回信確認，並安排工程人員在連假期間抽查現場至少一次。', correct: true },
+      { label: 'C', text: '打電話給包商，口頭確認他理解停工的範圍和時間，並記錄通話時間和承諾事項。', correct: true }
+    ],
+    actualIdx: 0,
+    whatHappened: '台鐵以 LINE 傳送停工令，確認已讀後沒有任何後續追蹤。李義祥帶領越南移工華文好在清明連假期間進入現場施工。沒有任何人發現這件事。',
+    detail: '管理溝通的核心不只是「傳送訊息」，而是「確認訊息產生了應有的效果」。一個有確認回覆、有執行驗證的機制，可能在這一刻就阻斷了後來的災難鏈。',
+    pmbok_lesson: 'PMBOK 11.2 管理溝通要求確認接收、理解，並驗證後續行動。LINE 訊息在沒有驗證機制的情況下，不構成有效的溝通管理——即使對方「已讀」。'
+  },
+  {
+    num: 2,
+    tag: '失敗層 2／5',
+    pmbok: 'CH11.3 監視溝通',
+    date: '2021 年 1 月（事故前 3 個月）',
+    scenario: '你是工地督導員。一台混凝土車在施工便道卡陷，事件被記錄下來。原因很清楚：施工便道沒有按規定鋪設青混凝土，地面鬆軟無法承重。',
+    context: '規範明確要求施工便道須鋪設混凝土。包商說「後續會補」。你面前有一份空白的督導報告要填。距離清明假期還有約三個月。',
+    question: '你怎麼處理這份督導報告？',
+    choices: [
+      { label: 'A', text: '照實記錄事件，放入報告歸檔。這是正常督導流程，下次查核再看有沒有改善。', correct: false },
+      { label: 'B', text: '在報告中標記為「高風險缺失」，給承包商書面改善期限（14 天），並回報給台鐵局主管。', correct: true },
+      { label: 'C', text: '立即通知台鐵局，要求暫停工程直到缺失改善且通過驗收才能復工。', correct: true }
+    ],
+    actualIdx: 0,
+    whatHappened: '1 月的混凝土車卡陷事件被記錄在督導報告裡。沒有被標記為高風險，沒有改善期限，沒有觸發任何風險升級程序。三個月後，同樣的問題在同一地點以更嚴重的方式重演。',
+    detail: '這個「記錄了但沒有行動」的缺口，是監視溝通系統崩潰的核心症狀。異常被看見了，卻沒有轉換成「有人需要做決策的訊號」。',
+    pmbok_lesson: 'PMBOK 11.3 監視溝通的目的，是把「有記錄的異常」轉換成「有人要做決策的行動」。沒有風險升級機制的監視，等同於沒有監視。'
+  },
+  {
+    num: 3,
+    tag: '失敗層 3／5',
+    pmbok: 'CH11.1 規劃溝通管理',
+    date: '2020 年至 2021 年（工程監督期間）',
+    scenario: '這個工程有三個監督單位：台鐵花工段、聯合大地監造廠商、中棪工程顧問。三個單位都定期查核、都提交報告。',
+    context: '5 次督導查核中，均未指出施工便道缺乏青混凝土的缺失。三個單位各自有查核範疇，但沒有人明確定義「當三者都發現同一個缺失時，誰負責確保它被改善」。',
+    question: '如果你是規劃這個工程溝通架構的專案管理師，你會怎麼設計？',
+    choices: [
+      { label: 'A', text: '三個單位各自獨立查核，分開提交報告給業主，由業主綜整後做決策。', correct: false },
+      { label: 'B', text: '指定一個「主責聯繫人」負責彙整三個單位的查核結果，所有高風險缺失都必須由他負責追蹤與升級。', correct: true },
+      { label: 'C', text: '三個單位每月召開聯合查核會議，共同審查彼此報告，並在會議記錄中明確標記「誰對哪個缺失負責跟進」。', correct: true }
+    ],
+    actualIdx: 0,
+    whatHappened: '三個監督單位都以為其他單位在追蹤缺失。沒有主責聯繫人，沒有聯合會議，沒有明確的跟進責任。溝通責任被稀釋到等同於無。',
+    detail: '一審判決中，台鐵工程司潘堂益被判全案最重的 8 年 10 月——比直接肇事的包商還重。法院認定：公務員明知溝通架構有缺口卻未積極填補，責任分散不代表沒有責任。',
+    pmbok_lesson: 'PMBOK 11.1 規劃溝通管理要求明確定義「誰對什麼資訊負責」。溝通計畫中最危險的盲點，是讓多個單位都以為別人在負責的那件事。'
+  },
+  {
+    num: 4,
+    tag: '失敗層 4／5',
+    pmbok: 'CH11.1 規劃溝通管理',
+    date: '2020 年（工程合約規劃階段）',
+    scenario: '你是規劃這個邊坡整修工程合約的台鐵工程師。施工區域緊鄰鐵路行車區間，工程車輛每天都在軌道旁作業。',
+    context: '工程合約裡有停工規定、有安全規範，但關於「施工區域發生突發事件時，如何在最短時間內通知行車調度員停止列車行駛」，合約裡隻字未提。',
+    question: '你要如何在合約中設計緊急通報機制？',
+    choices: [
+      { label: 'A', text: '緊急狀況依照一般程序，撥打 110 或 119。鐵路緊急狀況也是一樣。', correct: false },
+      { label: 'B', text: '在合約中加入：施工區發生任何可能影響行車安全的事件，承包商須在 90 秒內致電台鐵行車調度專線，並記錄通報時間與內容。', correct: true },
+      { label: 'C', text: '要求承包商在開工前提交「緊急應變計畫」，包含通報對象、時間、方式與演練紀錄，由台鐵核准後才能開工。', correct: true }
+    ],
+    actualIdx: 0,
+    whatHappened: '工程合約從未設計緊急通報台鐵行車調度的機制。當工程車滑落後，李義祥不知道要打給誰、用什麼方式通報。7 秒後，列車以 123 km/h 的速度衝入隧道。',
+    detail: '那 7 秒，是整個溝通管理失敗的物理呈現。一個應該在規劃階段就設計好的緊急通報路徑，從來沒有被寫進任何文件。',
+    pmbok_lesson: 'PMBOK 11.1 規劃溝通管理的核心輸出，是一份定義「誰在何時透過什麼管道通知誰什麼事」的溝通管理計畫。緊急通報路徑，是最不能缺少的一條。'
+  },
+  {
+    num: 5,
+    tag: '失敗層 5／5',
+    pmbok: '跨機構資訊孤島',
+    date: '2021 年 4 月 2 日 上午 9:28',
+    scenario: '工程車因故熄火停在邊坡，李義祥和越南移工嘗試拖動，車輛失控向鐵軌滑去。你在現場。',
+    context: '你的手機裡沒有台鐵行車調度的緊急電話。施工現場沒有緊急通報設備。台鐵、監造、工程顧問、花蓮縣政府四個系統各自有資料庫，但沒有任何整合機制能即時示警。',
+    question: '你能做什麼？',
+    choices: [
+      { label: 'A', text: '試圖以雙手阻擋滑落的工程車，或大聲呼救請旁人協助。', correct: false },
+      { label: 'B', text: '撥打 119，說明鐵路緊急狀況，要求協助聯繫台鐵調度。', correct: false },
+      { label: 'C', text: '立即撥打台鐵行車調度緊急專線，請求停止列車行駛——但這個號碼從來沒有人告訴你。', correct: false }
+    ],
+    actualIdx: 0,
+    whatHappened: '7 秒後，太魯閣號 408 次列車以 123 km/h 的速度撞上工程車殘骸。49 人罹難，213 人受傷。三個選項沒有一個真正有效——因為所有有效的行動，都應該在「此刻之前」就已經被規劃、設計、訓練到位。',
+    detail: '這道問題沒有正確答案。當緊急時刻來臨，溝通管理的三個流程缺口已經讓任何當下的補救都變得幾乎不可能。正確的決策，早在數月前就應該做了。',
+    pmbok_lesson: 'CH11 的三個流程（規劃、管理、監視）是一個系統，不是三個選項。每個環節的缺失，都會讓整個系統在最需要的時刻失靈。此刻的無能為力，是規劃失敗的代價。'
+  }
+];
+
+const state = { role: null, choices: [], correctCount: 0 };
+let curMoment = 0;
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectRole(role) {
+  state.role = role;
+  renderMoment(0);
+  show('s-moment');
+}
+
+function renderMoment(idx) {
+  curMoment = idx;
+  const m = moments[idx];
+  const pct = (idx / moments.length) * 100;
+
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('m-tag').textContent = m.tag;
+  document.getElementById('m-date').textContent = m.date;
+  document.getElementById('m-scenario').textContent = m.scenario;
+  document.getElementById('m-context').textContent = m.context;
+  document.getElementById('m-question').textContent = m.question;
+
+  const wrap = document.getElementById('m-choices');
+  wrap.innerHTML = '';
+  m.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="clabel">${c.label}</span>${c.text}`;
+    btn.addEventListener('click', () => pickChoice(idx, i));
+    wrap.appendChild(btn);
+  });
+}
+
+function pickChoice(mIdx, cIdx) {
+  // prevent double-click
+  document.querySelectorAll('.choice-btn').forEach(b => b.classList.add('disabled'));
+  const m = moments[mIdx];
+  state.choices[mIdx] = cIdx;
+  if (m.choices[cIdx].correct) state.correctCount++;
+  setTimeout(() => { renderConsequence(mIdx, cIdx); show('s-consequence'); }, 300);
+}
+
+function renderConsequence(mIdx, cIdx) {
+  const m = moments[mIdx];
+  const chosen = m.choices[cIdx];
+  const pct = ((mIdx + 1) / moments.length) * 100;
+
+  document.getElementById('prog-fill-c').style.width = pct + '%';
+  document.getElementById('c-tag').textContent = m.tag;
+  document.getElementById('c-pmbok').textContent = m.pmbok;
+
+  // dots
+  const dots = document.getElementById('c-dots');
+  dots.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i < mIdx ? ' active' : i === mIdx ? (chosen.correct ? ' correct' : ' active') : '');
+    dots.appendChild(d);
+  }
+
+  const badge = document.getElementById('c-badge');
+  if (mIdx === 4) {
+    badge.textContent = '▲ 這一刻，沒有人能獨力做到';
+    badge.className = 'rbadge actual';
+  } else if (chosen.correct) {
+    badge.textContent = '✓ 這是有效的溝通管理決策';
+    badge.className = 'rbadge correct';
+  } else {
+    badge.textContent = '✗ 現實中的選擇——也是這個';
+    badge.className = 'rbadge wrong';
+  }
+
+  document.getElementById('c-yourchoice').textContent = `你選了：${chosen.label}｜${chosen.text}`;
+  document.getElementById('c-whathappened').textContent = m.whatHappened;
+  document.getElementById('c-detail').textContent = m.detail;
+  document.getElementById('c-pmboktag').textContent = m.pmbok;
+  document.getElementById('c-pmbokmsg').textContent = m.pmbok_lesson;
+
+  const nBtn = document.getElementById('c-next-btn');
+  if (mIdx < moments.length - 1) {
+    nBtn.textContent = '下一個決策點 →';
+    nBtn.onclick = () => { renderMoment(mIdx + 1); show('s-moment'); };
+  } else {
+    nBtn.textContent = '查看完整分析 →';
+    nBtn.onclick = () => { renderFinal(); show('s-final'); };
+  }
+}
+
+function renderFinal() {
+  const c = state.correctCount;
+  document.getElementById('f-score').textContent = c + ' / 5';
+
+  const colors = ['#C0392B', '#C0392B', '#E8831A', '#E8831A', '#276E48', '#276E48'];
+  document.getElementById('f-score').style.color = colors[c] || '#276E48';
+
+  const msgs = [
+    '你的每一個選擇，都和那天現場的人一樣。這個結果說明了：溝通管理的失敗，不是因為當事人不夠聰明，而是因為系統本來就沒有被設計好。',
+    '你做出了一個有效決策。但在一個缺乏系統設計的環境裡，即使你做對了，其他環節的失敗仍然會讓災難無法避免。',
+    '你做出了兩個有效決策。系統需要每個環節都到位——你贏了一些，但不夠。',
+    '你做出了三個有效決策。比現實中的決策者做得更好，但溝通管理是一個系統，不是個人英雄主義。',
+    '你做出了四個有效決策。你幾乎彌補了所有缺口——但最後一關告訴你，當規劃失敗時，個人的應變能力有其極限。',
+    '你在前四個關鍵時刻都做出了正確選擇。現實中，這些決策確實能大幅降低事故發生的機率。但記住：系統需要每個角色都這樣思考，不只是你。'
+  ];
+  document.getElementById('f-sublabel').textContent = '正確決策數（共 5 個）';
+  document.getElementById('f-msg').textContent = msgs[Math.min(c, 5)];
+}
+
+function restart() {
+  state.choices = [];
+  state.correctCount = 0;
+  state.role = null;
+  show('s-intro');
+}
+</script>
+</body>
+</html>
