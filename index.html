@@ -325,7 +325,6 @@
     }
     .qbody { flex: 1; }
     .qtext { font-size: .93rem; line-height: 1.7; color: var(--lb); }
-    .qtarget { font-size: .75rem; color: var(--or); margin-top: .3rem; }
     .verdict-bar {
       max-width: 700px; width: 100%; background: var(--or);
       border-radius: 7px; padding: 1rem 1.4rem; margin-bottom: 2rem;
@@ -356,7 +355,7 @@
      SCREEN 1 — INTRO
 ══════════════════════════════════════════ -->
 <div class="screen active" id="s-intro">
-  <div class="intro-badge">PMBOK CH11 ｜ 溝通管理決策模擬</div>
+  <div class="intro-badge">溝通管理決策模擬</div>
   <div class="intro-title">太魯閣號<br>0402 事故</div>
   <div class="intro-sub">如果當時你在那裡，你會做出不同的選擇嗎？</div>
 
@@ -425,7 +424,7 @@
 <div class="screen" id="s-moment">
   <div class="moment-topbar">
     <span class="mtag" id="m-tag">失敗層 1/5</span>
-    <span class="mtitle" id="m-title">CH11 溝通管理決策點</span>
+    <span class="mtitle" id="m-title">溝通管理決策點</span>
   </div>
   <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
 
@@ -444,7 +443,7 @@
 <div class="screen" id="s-consequence">
   <div class="con-topbar">
     <span class="mtag" id="c-tag">失敗層 1/5</span>
-    <span class="mtitle" id="c-pmbok">CH11.2 管理溝通</span>
+    <span class="mtitle" id="c-pmbok">管理溝通</span>
   </div>
   <div class="prog-wrap"><div class="prog-fill" id="prog-fill-c" style="width:0%"></div></div>
 
@@ -459,7 +458,7 @@
 
     <div class="con-detail" id="c-detail"></div>
 
-    <div class="pmbok-pill" id="c-pmboktag">CH11.2 管理溝通</div>
+    <div class="pmbok-pill" id="c-pmboktag">管理溝通</div>
     <div class="pmbok-box" id="c-pmbokmsg"></div>
   </div>
 
@@ -484,28 +483,28 @@
       <div class="layer-circle">1</div>
       <div class="layer-txt">
         <div><span class="or bold">LINE 停工令無確認機制</span> — 訊息發出後沒有驗證執行，承包商在連假期間違規進場施工</div>
-        <div class="layer-pmbok">CH11.2 管理溝通</div>
+        <div class="layer-pmbok">管理溝通</div>
       </div>
     </div>
     <div class="layer-row">
       <div class="layer-circle">2</div>
       <div class="layer-txt">
         <div><span class="or bold">1 月前車之鑑，有記錄無行動</span> — 混凝土車卡陷的異常被記錄，但從未觸發任何風險升級</div>
-        <div class="layer-pmbok">CH11.3 監視溝通</div>
+        <div class="layer-pmbok">監視溝通</div>
       </div>
     </div>
     <div class="layer-row">
       <div class="layer-circle">3</div>
       <div class="layer-txt">
         <div><span class="or bold">三個督導單位責任分散</span> — 每個單位都以為另外兩個在負責，等同於沒有人負責</div>
-        <div class="layer-pmbok">CH11.1 規劃溝通管理</div>
+        <div class="layer-pmbok">規劃溝通管理</div>
       </div>
     </div>
     <div class="layer-row">
       <div class="layer-circle">4</div>
       <div class="layer-txt">
         <div><span class="or bold">沒有緊急通報台鐵的機制</span> — 工程合約中從未設計當施工區發生緊急事件時如何通知行車調度</div>
-        <div class="layer-pmbok">CH11.1 規劃溝通管理</div>
+        <div class="layer-pmbok">規劃溝通管理</div>
       </div>
     </div>
     <div class="layer-row">
@@ -518,7 +517,7 @@
   </div>
 
   <div class="final-btns">
-    <button class="btn btn-or" onclick="show('s-pmbok')">CH11 框架對照 →</button>
+    <button class="btn btn-or" onclick="show('s-pmbok')">溝通管理框架對照 →</button>
     <button class="btn btn-db" style="border:1px solid rgba(255,255,255,.2)" onclick="show('s-reflection')">課堂討論題</button>
   </div>
 </div>
@@ -527,12 +526,12 @@
      SCREEN 6 — PMBOK MAP
 ══════════════════════════════════════════ -->
 <div class="screen" id="s-pmbok">
-  <div class="pmbok-title">用 PMBOK CH11 解剖這個案例</div>
+  <div class="pmbok-title">用溝通管理框架解剖這個案例</div>
   <div class="pmbok-sub">三個流程缺口同時存在，每個都是必要的，但任何一個缺失都足以造成災難</div>
 
   <div class="pmbok-grid">
     <div class="pcard">
-      <div class="pcard-hdr" style="background:var(--red)">CH11.1　規劃溝通管理</div>
+      <div class="pcard-hdr" style="background:var(--red)">規劃溝通管理</div>
       <div class="pcard-body">
         <strong>應有的設計：</strong><br>
         明確定義「誰在何時、透過什麼管道、通知誰、通知什麼事」——尤其是緊急狀況下的通報路徑。<br><br>
@@ -543,7 +542,7 @@
       </div>
     </div>
     <div class="pcard">
-      <div class="pcard-hdr" style="background:var(--abl)">CH11.2　管理溝通</div>
+      <div class="pcard-hdr" style="background:var(--abl)">管理溝通</div>
       <div class="pcard-body">
         <strong>應有的設計：</strong><br>
         溝通不只是「傳送訊息」，而是確認訊息被接收、理解、並產生對應的行動。<br><br>
@@ -554,7 +553,7 @@
       </div>
     </div>
     <div class="pcard">
-      <div class="pcard-hdr" style="background:var(--grn)">CH11.3　監視溝通</div>
+      <div class="pcard-hdr" style="background:var(--grn)">監視溝通</div>
       <div class="pcard-body">
         <strong>應有的設計：</strong><br>
         把「有記錄的異常」轉換成「有人要做決策的行動訊號」，並定義清楚的風險升級路徑。<br><br>
@@ -589,41 +588,36 @@
       <div class="qnum">Q1</div>
       <div class="qbody">
         <div class="qtext">在你的組織裡，當緊急事件發生時，「誰要在幾分鐘內通知誰」有明確的設計嗎？如果沒有，最可能的原因是什麼？</div>
-        <div class="qtarget">🏢 在職生優先 ── 請分享真實經驗</div>
       </div>
     </div>
     <div class="qcard">
       <div class="qnum">Q2</div>
       <div class="qbody">
-        <div class="qtext">台鐵以 LINE 發送停工通知，算是完成了「管理溝通」的責任嗎？根據 PMBOK 11.2，一個有效的溝通應該包含哪些要素？</div>
-        <div class="qtarget">🎓 應屆生也能參與 ── 用框架回答</div>
+        <div class="qtext">台鐵以 LINE 發送停工通知，算是完成了「管理溝通」的責任嗎？一個有效的溝通應該包含哪些要素？</div>
       </div>
     </div>
     <div class="qcard">
       <div class="qnum">Q3</div>
       <div class="qbody">
         <div class="qtext">三個監督單位都「以為是別人在查」——這種責任分散的問題，在敏捷團隊裡會不會發生？Scrum 的哪個機制可以防止這種情況？</div>
-        <div class="qtarget">🤝 兩者並重 ── PMBOK 與敏捷對照</div>
       </div>
     </div>
     <div class="qcard">
       <div class="qnum">Q4</div>
       <div class="qbody">
         <div class="qtext">審判結果顯示，台鐵工程司（公務員）的刑期反而最重，比直接肇事的包商還高。從專案治理的角度，你怎麼看這個判決？</div>
-        <div class="qtarget">🏢 在職生優先 ── 連結到組織責任設計</div>
       </div>
     </div>
     <div class="qcard">
       <div class="qnum">Q5</div>
       <div class="qbody">
         <div class="qtext">如果你是這個工程的專案管理師，在不增加太多成本的前提下，你最優先要設計的溝通機制是哪一個？為什麼？</div>
-        <div class="qtarget">🎓 應屆生也能參與 ── 設計與取捨</div>
       </div>
     </div>
   </div>
 
   <div class="verdict-bar">
-    💬 本案一句話：49 人罹難的太魯閣號事故，不是因為沒有規定——而是因為規定從未被設計成一套確保資訊到達正確的人、並產生行動的溝通系統。這，正是 PMBOK CH11 存在的理由。
+    💬 本案一句話：49 人罹難的太魯閣號事故，不是因為沒有規定——而是因為規定從未被設計成一套確保資訊到達正確的人、並產生行動的溝通系統。這，正是溝通管理存在的理由。
   </div>
 
   <div class="restart-row">
@@ -641,7 +635,7 @@ const moments = [
   {
     num: 1,
     tag: '失敗層 1／5',
-    pmbok: 'CH11.2 管理溝通',
+    pmbok: '管理溝通',
     date: '2021 年 3 月 31 日（清明連假前一天）',
     scenario: '你是台鐵工程司。你剛透過 LINE 群組向包商發送了停工通知，要求清明連假期間完全停工。包商李義祥回覆了一個表情符號。',
     context: '這條工程合約的緊急聯絡機制從未被明確設計過。目前對外溝通的唯一管道就是 LINE 群組。連假後你有其他要務，無法到現場巡視。',
@@ -654,12 +648,12 @@ const moments = [
     actualIdx: 0,
     whatHappened: '台鐵以 LINE 傳送停工令，確認已讀後沒有任何後續追蹤。李義祥帶領越南移工華文好在清明連假期間進入現場施工。沒有任何人發現這件事。',
     detail: '管理溝通的核心不只是「傳送訊息」，而是「確認訊息產生了應有的效果」。一個有確認回覆、有執行驗證的機制，可能在這一刻就阻斷了後來的災難鏈。',
-    pmbok_lesson: 'PMBOK 11.2 管理溝通要求確認接收、理解，並驗證後續行動。LINE 訊息在沒有驗證機制的情況下，不構成有效的溝通管理——即使對方「已讀」。'
+    pmbok_lesson: '管理溝通要求確認接收、理解，並驗證後續行動。LINE 訊息在沒有驗證機制的情況下，不構成有效的溝通管理——即使對方「已讀」。'
   },
   {
     num: 2,
     tag: '失敗層 2／5',
-    pmbok: 'CH11.3 監視溝通',
+    pmbok: '監視溝通',
     date: '2021 年 1 月（事故前 3 個月）',
     scenario: '你是工地督導員。一台混凝土車在施工便道卡陷，事件被記錄下來。原因很清楚：施工便道沒有按規定鋪設青混凝土，地面鬆軟無法承重。',
     context: '規範明確要求施工便道須鋪設混凝土。包商說「後續會補」。你面前有一份空白的督導報告要填。距離清明假期還有約三個月。',
@@ -672,12 +666,12 @@ const moments = [
     actualIdx: 0,
     whatHappened: '1 月的混凝土車卡陷事件被記錄在督導報告裡。沒有被標記為高風險，沒有改善期限，沒有觸發任何風險升級程序。三個月後，同樣的問題在同一地點以更嚴重的方式重演。',
     detail: '這個「記錄了但沒有行動」的缺口，是監視溝通系統崩潰的核心症狀。異常被看見了，卻沒有轉換成「有人需要做決策的訊號」。',
-    pmbok_lesson: 'PMBOK 11.3 監視溝通的目的，是把「有記錄的異常」轉換成「有人要做決策的行動」。沒有風險升級機制的監視，等同於沒有監視。'
+    pmbok_lesson: '監視溝通的目的，是把「有記錄的異常」轉換成「有人要做決策的行動」。沒有風險升級機制的監視，等同於沒有監視。'
   },
   {
     num: 3,
     tag: '失敗層 3／5',
-    pmbok: 'CH11.1 規劃溝通管理',
+    pmbok: '規劃溝通管理',
     date: '2020 年至 2021 年（工程監督期間）',
     scenario: '這個工程有三個監督單位：台鐵花工段、聯合大地監造廠商、中棪工程顧問。三個單位都定期查核、都提交報告。',
     context: '5 次督導查核中，均未指出施工便道缺乏青混凝土的缺失。三個單位各自有查核範疇，但沒有人明確定義「當三者都發現同一個缺失時，誰負責確保它被改善」。',
@@ -690,12 +684,12 @@ const moments = [
     actualIdx: 0,
     whatHappened: '三個監督單位都以為其他單位在追蹤缺失。沒有主責聯繫人，沒有聯合會議，沒有明確的跟進責任。溝通責任被稀釋到等同於無。',
     detail: '一審判決中，台鐵工程司潘堂益被判全案最重的 8 年 10 月——比直接肇事的包商還重。法院認定：公務員明知溝通架構有缺口卻未積極填補，責任分散不代表沒有責任。',
-    pmbok_lesson: 'PMBOK 11.1 規劃溝通管理要求明確定義「誰對什麼資訊負責」。溝通計畫中最危險的盲點，是讓多個單位都以為別人在負責的那件事。'
+    pmbok_lesson: '規劃溝通管理要求明確定義「誰對什麼資訊負責」。溝通計畫中最危險的盲點，是讓多個單位都以為別人在負責的那件事。'
   },
   {
     num: 4,
     tag: '失敗層 4／5',
-    pmbok: 'CH11.1 規劃溝通管理',
+    pmbok: '規劃溝通管理',
     date: '2020 年（工程合約規劃階段）',
     scenario: '你是規劃這個邊坡整修工程合約的台鐵工程師。施工區域緊鄰鐵路行車區間，工程車輛每天都在軌道旁作業。',
     context: '工程合約裡有停工規定、有安全規範，但關於「施工區域發生突發事件時，如何在最短時間內通知行車調度員停止列車行駛」，合約裡隻字未提。',
@@ -708,7 +702,7 @@ const moments = [
     actualIdx: 0,
     whatHappened: '工程合約從未設計緊急通報台鐵行車調度的機制。當工程車滑落後，李義祥不知道要打給誰、用什麼方式通報。7 秒後，列車以 123 km/h 的速度衝入隧道。',
     detail: '那 7 秒，是整個溝通管理失敗的物理呈現。一個應該在規劃階段就設計好的緊急通報路徑，從來沒有被寫進任何文件。',
-    pmbok_lesson: 'PMBOK 11.1 規劃溝通管理的核心輸出，是一份定義「誰在何時透過什麼管道通知誰什麼事」的溝通管理計畫。緊急通報路徑，是最不能缺少的一條。'
+    pmbok_lesson: '規劃溝通管理的核心輸出，是一份定義「誰在何時透過什麼管道通知誰什麼事」的溝通管理計畫。緊急通報路徑，是最不能缺少的一條。'
   },
   {
     num: 5,
@@ -726,7 +720,7 @@ const moments = [
     actualIdx: 0,
     whatHappened: '7 秒後，太魯閣號 408 次列車以 123 km/h 的速度撞上工程車殘骸。49 人罹難，213 人受傷。三個選項沒有一個真正有效——因為所有有效的行動，都應該在「此刻之前」就已經被規劃、設計、訓練到位。',
     detail: '這道問題沒有正確答案。當緊急時刻來臨，溝通管理的三個流程缺口已經讓任何當下的補救都變得幾乎不可能。正確的決策，早在數月前就應該做了。',
-    pmbok_lesson: 'CH11 的三個流程（規劃、管理、監視）是一個系統，不是三個選項。每個環節的缺失，都會讓整個系統在最需要的時刻失靈。此刻的無能為力，是規劃失敗的代價。'
+    pmbok_lesson: '溝通管理的三個流程（規劃、管理、監視）是一個系統，不是三個選項。每個環節的缺失，都會讓整個系統在最需要的時刻失靈。此刻的無能為力，是規劃失敗的代價。'
   }
 ];
 
