@@ -859,12 +859,12 @@
 
     <div class="wq">
       <div class="wq-head"><div class="qnum">1</div>
-        <div class="wq-title">回顧：5 個決策點裡，哪一個讓你最意外？<small>點選決策點，再寫你當時選了什麼、為什麼意外（至少 30 字）。</small></div>
+        <div class="wq-title">回顧：5 個決策點裡，哪一個讓你最意外？<small>點選決策點，再寫你當時選了什麼、為什麼意外（至少 10 字）。</small></div>
       </div>
       <div class="chips" id="w-surprise"></div>
       <label class="field">
         <textarea class="inp" id="w-why" maxlength="300" placeholder="例：我在決策點 1 選了 A，以為對方已讀就算通知到了。看完才發現『已讀』不等於『會照做』，沒有人去確認，停工令就只是一則訊息。"></textarea>
-        <div class="counter" id="w-why-n">0 / 30 字</div>
+        <div class="counter" id="w-why-n">0 / 10 字</div>
       </label>
     </div>
 
@@ -1232,7 +1232,7 @@ function updatePreview() {
   document.getElementById('w-preview').innerHTML = mechanismSentence(true);
   const n = val('w-why').length;
   const c = document.getElementById('w-why-n');
-  c.textContent = `${n} / 30 字`; c.className = 'counter' + (n >= 30 ? ' ok' : '');
+  c.textContent = `${n} / 10 字`; c.className = 'counter' + (n >= 10 ? ' ok' : '');
 }
 document.addEventListener('input', e => { if (e.target.closest && e.target.closest('#s-write')) updatePreview(); });
 
@@ -1240,7 +1240,7 @@ function finish() {
   const err = document.getElementById('write-err');
   const miss = [];
   if (!W.surprise) miss.push('第 1 題：點選最意外的決策點');
-  if (val('w-why').length < 30) miss.push('第 1 題：原因至少 30 字');
+  if (val('w-why').length < 10) miss.push('第 1 題：原因至少 10 字');
   if (!W.type) miss.push('第 2 題：選擇機制類型');
   const blanks = [['w-when', '什麼事發生'], ['w-who', '誰通知'], ['w-whom', '通知誰'], ['w-channel', '管道'], ['w-deadline', '多久內'], ['w-confirm', '確認方式']].filter(([id]) => !val(id)).map(([, n]) => n);
   if (blanks.length) miss.push('第 2 題還沒填：' + blanks.join('、'));
