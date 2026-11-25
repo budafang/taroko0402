@@ -533,10 +533,7 @@
     <label class="field">
       <span class="field-label">學號</span>
       <input class="inp big" id="sid" autocomplete="off" inputmode="text" maxlength="12" placeholder="例：A112040014">
-    </label>
-    <label class="field">
-      <span class="field-label">再輸入一次確認</span>
-      <input class="inp big" id="sid2" autocomplete="off" inputmode="text" maxlength="12">
+      <span class="field-hint center">請確認學號正確，打錯會拿不到平時成績。</span>
     </label>
     <div class="err" id="login-err"></div>
     <div class="center"><button class="btn btn-or" onclick="login()">確認，選擇角色 →</button></div>
@@ -1188,10 +1185,8 @@ function post(body) {
 
 function login() {
   const a = normSid(document.getElementById('sid').value);
-  const b = normSid(document.getElementById('sid2').value);
   const err = document.getElementById('login-err');
   if (!/^[A-Z0-9]{5,12}$/.test(a)) { err.textContent = '學號格式不對：只能有英文字母和數字，5–12 碼。'; return; }
-  if (a !== b) { err.textContent = '兩次輸入的學號不一樣，請再檢查一次。'; return; }
   err.textContent = '';
   state.sid = a;
   store.set('sid', a);
@@ -1313,7 +1308,7 @@ function copyCard() {
 // 重新整理頁面後：帶回學號；有未送出的學習卡就直接回到學習卡頁重送
 (function resume() {
   const sid = store.get('sid');
-  if (sid) { document.getElementById('sid').value = sid; document.getElementById('sid2').value = sid; }
+  if (sid) document.getElementById('sid').value = sid;
   const pending = store.get('pending');
   if (pending && pending.sid) {
     lastPayload = pending; state.sid = pending.sid;
