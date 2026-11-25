@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>老師投影｜太魯閣號 0402 溝通管理模擬</title>
+<style>
+  :root { --db:#1B3A6B; --db2:#0E2142; --or:#E8831A; --red:#C0392B; --grn:#276E48; --abl:#2D6DB5; --mg:#8A9BB0; --lb:#EBF0F8; --wh:#fff; --dt:#2D3748; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Microsoft JhengHei','微軟正黑體','Noto Sans TC','PingFang TC',sans-serif; background: var(--db2); color: var(--wh); min-height: 100vh; }
+  header { background: var(--db); padding: 1rem 1.6rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; border-left: 7px solid var(--or); }
+  header h1 { font-size: 1.3rem; flex: 1; }
+  header label { font-size: .85rem; color: var(--lb); }
+  header input, header button { font-family: inherit; font-size: .9rem; padding: .35rem .6rem; border-radius: 4px; border: none; }
+  header button { background: var(--or); color: var(--wh); font-weight: 700; cursor: pointer; }
+  header button.ghost { background: transparent; border: 1px solid rgba(255,255,255,.35); color: var(--lb); }
+  .upd { font-size: .78rem; color: var(--mg); }
+  main { padding: 1.4rem 1.6rem 3rem; max-width: 1400px; margin: 0 auto; }
+  .tabs { display: flex; gap: .5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .tab { background: transparent; color: var(--lb); border: 1px solid rgba(255,255,255,.3); border-radius: 20px; padding: .45rem 1.1rem; font-family: inherit; font-size: 1rem; cursor: pointer; }
+  .tab.on { background: var(--or); border-color: var(--or); color: var(--wh); font-weight: 700; }
+  .view { display: none; } .view.on { display: block; }
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .card { background: rgba(255,255,255,.06); border-radius: 8px; padding: 1.1rem 1.2rem; }
+  .card h2 { font-size: 1rem; color: var(--or); margin-bottom: .8rem; letter-spacing: .05em; }
+  .big { font-size: 3.4rem; font-weight: 900; line-height: 1; }
+  .big small { font-size: 1.1rem; color: var(--mg); font-weight: 400; margin-left: .3rem; }
+  .join { display: flex; gap: 1.4rem; align-items: center; }
+  .join img { width: 170px; height: 170px; background: var(--wh); padding: 6px; border-radius: 6px; }
+  .url { font-size: 1.15rem; font-weight: 700; word-break: break-all; }
+  .bar { display: grid; grid-template-columns: 3.4rem 1fr 3rem; align-items: center; gap: .6rem; margin-bottom: .45rem; font-size: 1rem; }
+  .bar.wide { grid-template-columns: 1fr 3rem; row-gap: .25rem; margin-bottom: .7rem; }
+  .bar.wide .lbl { grid-column: 1 / -1; font-weight: 400; font-size: .95rem; }
+  .track { background: rgba(255,255,255,.1); height: 26px; border-radius: 4px; overflow: hidden; }
+  .fill { height: 100%; background: var(--abl); transition: width .5s; }
+  .fill.good { background: var(--grn); } .fill.real { background: var(--red); }
+  .n { text-align: right; font-weight: 700; }
+  .lbl { font-weight: 700; }
+  .q { font-size: .92rem; color: var(--lb); line-height: 1.6; margin-bottom: .8rem; }
+  .legend { font-size: .8rem; color: var(--mg); margin-bottom: 1rem; display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
+  .wall { columns: 3 320px; column-gap: 1rem; }
+  .note { break-inside: avoid; background: var(--wh); color: var(--dt); border-radius: 6px; padding: .9rem 1rem; margin-bottom: 1rem; line-height: 1.75; font-size: 1.02rem; border-top: 5px solid var(--abl); }
+  .note.t-規劃溝通 { border-top-color: var(--red); } .note.t-管理溝通 { border-top-color: var(--abl); } .note.t-監視溝通 { border-top-color: var(--grn); }
+  .note .tag { font-size: .75rem; font-weight: 700; color: var(--mg); display: block; margin-bottom: .3rem; }
+  .note .one { margin-top: .6rem; padding-top: .6rem; border-top: 1px dashed #CBD5E1; font-size: .92rem; color: #4A5568; }
+  .empty { color: var(--mg); padding: 2rem; text-align: center; }
+  .qs { counter-reset: q; }
+  .qs li { list-style: none; background: rgba(255,255,255,.06); border-radius: 8px; padding: 1.1rem 1.2rem 1.1rem 3.6rem; margin-bottom: .9rem; position: relative; font-size: 1.2rem; line-height: 1.7; }
+  .qs li::before { counter-increment: q; content: 'Q' counter(q); position: absolute; left: 1rem; top: 1.1rem; color: var(--or); font-weight: 900; }
+  .err { background: var(--red); padding: .8rem 1rem; border-radius: 6px; margin-bottom: 1rem; display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>太魯閣號 0402｜課堂即時統計</h1>
+  <label>日期 <input type="date" id="date"></label>
+  <button class="ghost" id="pause">暫停更新</button>
+  <span class="upd" id="upd">載入中…</span>
+</header>
+<main>
+  <div class="err" id="err"></div>
+  <div class="tabs">
+    <button class="tab on" data-v="v-overview">進度</button>
+    <button class="tab" data-v="v-choices">決策分布</button>
+    <button class="tab" data-v="v-wall">溝通機制牆</button>
+    <button class="tab" data-v="v-discuss">討論題</button>
+  </div>
+
+  <section class="view on" id="v-overview">
+    <div class="row">
+      <div class="card"><h2>學生入口</h2>
+        <div class="join"><img id="qr" alt="學生入口 QR code"><div><div class="url" id="url"></div><p class="q" style="margin-top:.6rem">手機掃碼 → 輸入學號 → 玩完 5 個決策點 → 寫學習心得送出</p></div></div>
+      </div>
+      <div class="card"><h2>已加入</h2><div class="big" id="joined">0<small>人</small></div></div>
+      <div class="card"><h2>已交學習卡（完成）</h2><div class="big" id="submitted">0<small>人</small></div><p class="q" style="margin-top:.7rem">完成名單與學號只在 Google 試算表「提交紀錄」查看，不在這裡投影。</p></div>
+    </div>
+    <div class="row">
+      <div class="card"><h2>前 4 關有效決策數</h2><div id="scores"></div></div>
+      <div class="card"><h2>最讓人意外的決策點</h2><div id="surprise"></div></div>
+      <div class="card"><h2>設計的機制類型</h2><div id="types"></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-choices">
+    <div class="legend"><span><i style="background:var(--grn)"></i>有效的溝通管理決策</span><span><i style="background:var(--red)"></i>現實中真的發生的選擇</span><span><i style="background:var(--abl)"></i>決策點 5：沒有正確答案</span></div>
+    <div class="row" id="choices"></div>
+  </section>
+
+  <section class="view" id="v-wall">
+    <div class="legend"><span><i style="background:var(--red)"></i>規劃溝通</span><span><i style="background:var(--abl)"></i>管理溝通</span><span><i style="background:var(--grn)"></i>監視溝通</span><span>匿名、順序隨機</span></div>
+    <div class="wall" id="wall"></div>
+  </section>
+
+  <section class="view" id="v-discuss">
+    <ol class="qs">
+      <li>看「決策分布」：決策點 1 有多少人選了 A（確認已讀就算通知）？如果你是那天的工程司，你覺得自己真的會做得不一樣嗎？為什麼？</li>
+      <li>從「溝通機制牆」挑一條機制：它的「確認方式」能真的確認對方有照做嗎？如果不能，要怎麼改？</li>
+      <li>三個督導單位都「以為是別人在查」。你們組的一案通，有沒有哪件事也是「每個人都以為別人會做」？現在指定一位負責人。</li>
+      <li>在不增加太多成本的前提下，你們組最優先要補上的一條溝通機制是哪一條？把它寫進一案通的溝通管理計畫。</li>
+    </ol>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script>
+'use strict';
+const ENDPOINT = (window.TAROKO_CONFIG && window.TAROKO_CONFIG.endpoint) || '';
+// 與 index.html 的 moments 對應：correct 為有效決策，actual 為現實中的選擇
+const DECISIONS = [
+  { t: '決策點 1｜管理溝通', q: 'LINE 停工令已讀後，還需要做什麼？', opts: ['A 確認已讀就算完成', 'B 書面確認＋連假抽查', 'C 電話確認並記錄'], good: ['B', 'C'], actual: 'A' },
+  { t: '決策點 2｜監視溝通', q: '混凝土車卡陷，督導報告怎麼處理？', opts: ['A 照實記錄歸檔', 'B 標高風險＋改善期限＋回報', 'C 立即要求暫停工程'], good: ['B', 'C'], actual: 'A' },
+  { t: '決策點 3｜規劃溝通管理', q: '三個監督單位，溝通架構怎麼設計？', opts: ['A 各自查核分開報告', 'B 指定主責聯繫人', 'C 每月聯合查核會議'], good: ['B', 'C'], actual: 'A' },
+  { t: '決策點 4｜規劃溝通管理', q: '合約中的緊急通報機制怎麼設計？', opts: ['A 依一般程序撥 110／119', 'B 90 秒內通報行車調度', 'C 開工前核准緊急應變計畫'], good: ['B', 'C'], actual: 'A' },
+  { t: '決策點 5｜跨機構資訊孤島', q: '9:28 工程車滑落，你能做什麼？', opts: ['A 阻擋或呼救', 'B 撥 119 請求聯繫', 'C 撥調度專線（但沒人給過號碼）'], good: [], actual: '', none: true }
+];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const today = () => new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Taipei' });
+
+$('date').value = today();
+const studentUrl = new URL('./', location.href).href;
+$('url').textContent = studentUrl.replace(/^https?:\/\//, '');
+$('qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=0&data=' + encodeURIComponent(studentUrl);
+$('qr').onerror = () => { $('qr').style.display = 'none'; };
+
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === b.dataset.v));
+});
+
+function bars(entries, total, extra) {
+  return entries.map(([label, n, cls]) => {
+    const pct = total ? Math.round((n / total) * 100) : 0;
+    return `<div class="bar ${extra || ''}"><span class="lbl">${esc(label)}</span><div class="track"><div class="fill ${cls || ''}" style="width:${pct}%"></div></div><span class="n">${n}</span></div>`;
+  }).join('');
+}
+
+function render(d) {
+  $('joined').innerHTML = `${d.joined}<small>人</small>`;
+  $('submitted').innerHTML = `${d.submitted}<small>人</small>`;
+  const tot = d.submitted;
+  $('scores').innerHTML = bars(['0', '1', '2', '3', '4'].map(k => [k + ' 個', d.scores[k] || 0, k === '4' ? 'good' : '']), tot);
+  $('surprise').innerHTML = bars(['1', '2', '3', '4', '5'].map(k => ['點 ' + k, d.surprise[k] || 0]), tot);
+  $('types').innerHTML = bars([['規劃', d.types['規劃溝通'] || 0, 'real'], ['管理', d.types['管理溝通'] || 0], ['監視', d.types['監視溝通'] || 0, 'good']], tot);
+
+  $('choices').innerHTML = DECISIONS.map((dec, i) => {
+    const c = d.choices[i] || {};
+    const sum = ['A', 'B', 'C'].reduce((s, k) => s + (c[k] || 0), 0);
+    const rows = dec.opts.map(o => {
+      const k = o[0];
+      const cls = dec.none ? '' : dec.good.includes(k) ? 'good' : k === dec.actual ? 'real' : '';
+      return [o, c[k] || 0, cls];
+    });
+    return `<div class="card"><h2>${esc(dec.t)}</h2><p class="q">${esc(dec.q)}</p>${bars(rows, sum, 'wide')}</div>`;
+  }).join('');
+
+  $('wall').innerHTML = d.wall.length
+    ? d.wall.map(w => `<div class="note t-${esc(w.type)}"><span class="tag">${esc(w.type)}</span>${esc(w.mechanism)}<div class="one">以前以為溝通就是「${esc(w.before)}」，現在知道還要「${esc(w.after)}」。</div></div>`).join('')
+    : '<div class="empty">還沒有人交出學習卡。</div>';
+}
+
+let paused = false, timer = null;
+$('pause').onclick = () => { paused = !paused; $('pause').textContent = paused ? '恢復更新' : '暫停更新'; if (!paused) load(); };
+$('date').onchange = () => load();
+
+function load() {
+  clearTimeout(timer);
+  if (!ENDPOINT) { $('err').style.display = 'block'; $('err').textContent = '尚未設定 config.js 的 Google Apps Script 網址，請先完成部署。'; $('upd').textContent = ''; return; }
+  fetch(`${ENDPOINT}?action=stats&date=${encodeURIComponent($('date').value || today())}`)
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) throw new Error(d.error || 'failed');
+      $('err').style.display = 'none';
+      render(d);
+      $('upd').textContent = '更新於 ' + new Date().toLocaleTimeString('zh-TW', { hour12: false });
+    })
+    .catch(e => { $('err').style.display = 'block'; $('err').textContent = '讀取失敗：' + e.message + '（稍後自動重試）'; })
+    .finally(() => { if (!paused) timer = setTimeout(load, 6000); });
+}
+load();
+</script>
+</body>
+</html>

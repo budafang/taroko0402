@@ -405,6 +405,66 @@
       justify-content: flex-end; gap: 1rem;
     }
 
+    /* ════════════════════════════════
+       LOGIN / WRITE / CARD（學號、學習心得、學習卡）
+    ════════════════════════════════ */
+    #s-login, #s-write, #s-card { background: var(--db2); align-items: center; padding: 2.5rem 1.2rem; }
+    .panel { width: 100%; max-width: 720px; }
+    .panel-title { font-size: 1.4rem; font-weight: 700; color: var(--or); text-align: center; margin-bottom: .3rem; }
+    .panel-sub { color: var(--mg); text-align: center; font-size: .88rem; margin-bottom: 1.6rem; line-height: 1.7; }
+    .field { display: block; margin-bottom: 1rem; }
+    .field-label { display: block; font-size: .9rem; font-weight: 700; color: var(--lb); margin-bottom: .35rem; }
+    .field-hint { display: block; font-size: .78rem; color: var(--mg); margin-top: .3rem; line-height: 1.6; }
+    .inp {
+      width: 100%; font-family: inherit; font-size: 1rem; color: var(--dt);
+      background: var(--wh); border: 2px solid transparent; border-radius: 6px; padding: .7rem .85rem;
+    }
+    .inp:focus { outline: none; border-color: var(--or); }
+    textarea.inp { min-height: 96px; resize: vertical; line-height: 1.7; }
+    .inp.big { font-size: 1.5rem; text-align: center; letter-spacing: .08em; font-weight: 700; }
+    .err { color: #FF9C8F; font-size: .85rem; min-height: 1.3em; margin: .3rem 0 .8rem; text-align: center; }
+    .center { text-align: center; }
+    .wq {
+      background: rgba(255,255,255,.06); border-radius: 8px; padding: 1.2rem 1.2rem .4rem;
+      margin-bottom: 1.2rem; border-left: 4px solid var(--or);
+    }
+    .wq-head { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: .9rem; }
+    .wq-title { font-weight: 700; line-height: 1.6; }
+    .wq-title small { display: block; font-weight: 400; color: var(--mg); font-size: .8rem; margin-top: .2rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+    .chip {
+      background: transparent; color: var(--lb); border: 1px solid rgba(255,255,255,.3);
+      border-radius: 20px; padding: .4rem .9rem; font-family: inherit; font-size: .85rem; cursor: pointer;
+    }
+    .chip.on { background: var(--or); border-color: var(--or); color: var(--wh); font-weight: 700; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 .9rem; }
+    .preview {
+      background: var(--wh); color: var(--dt); border-radius: 6px; padding: .9rem 1rem;
+      line-height: 1.8; font-size: .92rem; margin-bottom: 1rem;
+    }
+    .preview .blank { color: #B0B8C4; }
+    .counter { font-size: .75rem; color: var(--mg); text-align: right; margin-top: .2rem; }
+    .counter.ok { color: #7FD3A0; }
+    /* 學習卡 */
+    .lcard { background: var(--wh); color: var(--dt); border-radius: 10px; overflow: hidden; margin-bottom: 1.2rem; }
+    .lcard-hdr { background: var(--db); color: var(--wh); padding: 1rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .lcard-hdr b { font-size: 1.05rem; }
+    .lcard-hdr span { font-size: .82rem; color: var(--lb); }
+    .lcard-sec { padding: .9rem 1.2rem; border-top: 1px solid #E2E8F0; }
+    .lcard-sec h4 { font-size: .75rem; letter-spacing: .1em; color: var(--abl); margin-bottom: .35rem; }
+    .lcard-sec p { font-size: .92rem; line-height: 1.8; }
+    .dec-row { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .dec { font-size: .8rem; border-radius: 4px; padding: .2rem .55rem; background: var(--lgray); }
+    .dec.ok { background: #DDF1E5; color: var(--grn); font-weight: 700; }
+    .dec.no { background: var(--lred); color: var(--red); }
+    .status { border-radius: 6px; padding: .8rem 1rem; font-size: .9rem; line-height: 1.6; margin-bottom: 1rem; text-align: center; }
+    .status.wait { background: rgba(255,255,255,.1); }
+    .status.ok { background: var(--grn); }
+    .status.bad { background: var(--red); }
+    .btn-row { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+    .whoami { position: fixed; right: .7rem; bottom: .6rem; font-size: .72rem; color: var(--mg); background: rgba(14,33,66,.85); padding: .2rem .6rem; border-radius: 12px; z-index: 5; }
+    @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
     /* ── UTILITY ── */
     .or  { color: var(--or); }
     .red { color: var(--red); }
@@ -459,8 +519,28 @@
     現在，<strong>換你來做這些選擇</strong>。
   </p>
 
-  <button class="btn btn-or" onclick="show('s-role')">開始模擬 →</button>
-  <p class="intro-hint mt2">5 個決策點｜約 8 分鐘｜無正確答案的最後一關</p>
+  <button class="btn btn-or" onclick="show('s-login')">開始模擬 →</button>
+  <p class="intro-hint mt2">5 個決策點＋學習心得｜約 20 分鐘｜無正確答案的最後一關</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1.5 — LOGIN（學號）
+══════════════════════════════════════════ -->
+<div class="screen" id="s-login">
+  <div class="panel" style="max-width:440px">
+    <div class="panel-title">輸入你的學號</div>
+    <div class="panel-sub">完成模擬並交出學習卡，才算完成本週活動。<br>學號只給老師登記平時成績，不會公開或投影。</div>
+    <label class="field">
+      <span class="field-label">學號</span>
+      <input class="inp big" id="sid" autocomplete="off" inputmode="text" maxlength="12" placeholder="例：A112040014">
+    </label>
+    <label class="field">
+      <span class="field-label">再輸入一次確認</span>
+      <input class="inp big" id="sid2" autocomplete="off" inputmode="text" maxlength="12">
+    </label>
+    <div class="err" id="login-err"></div>
+    <div class="center"><button class="btn btn-or" onclick="login()">確認，選擇角色 →</button></div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -665,7 +745,6 @@
 
   <div class="final-btns">
     <button class="btn btn-or" onclick="show('s-pmbok')">溝通管理框架對照 →</button>
-    <button class="btn btn-db" style="border:1px solid rgba(255,255,255,.2)" onclick="show('s-reflection')">課堂討論題</button>
   </div>
 </div>
 
@@ -718,7 +797,7 @@
   </div>
 
   <div class="final-btns">
-    <button class="btn btn-db" onclick="show('s-reflection')">課堂討論題 →</button>
+    <button class="btn btn-or" onclick="openWrite()">寫學習心得 →</button>
     <button class="btn btn-wh" onclick="show('s-final')">← 回到結果</button>
   </div>
 </div>
@@ -767,14 +846,98 @@
     💬 本案一句話：49 人罹難的太魯閣號事故，不是因為沒有規定——而是因為規定從未被設計成一套確保資訊到達正確的人、並產生行動的溝通系統。這，正是溝通管理存在的理由。
   </div>
 
-  <div class="restart-row">
+  <div class="restart-row btn-row">
+    <button class="btn btn-wh" onclick="show('s-card')">← 回到我的學習卡</button>
     <button class="btn btn-or" onclick="restart()">重新模擬 ↺</button>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════
+     SCREEN 8 — WRITE（引導式學習心得）
+══════════════════════════════════════════ -->
+<div class="screen" id="s-write">
+  <div class="panel">
+    <div class="panel-title">學習心得：把模擬變成你的東西</div>
+    <div class="panel-sub">三題，約 10 分鐘。照提示一格一格填，送出前會自動整理成一張學習卡。</div>
+
+    <div class="wq">
+      <div class="wq-head"><div class="qnum">1</div>
+        <div class="wq-title">回顧：5 個決策點裡，哪一個讓你最意外？<small>點選決策點，再寫你當時選了什麼、為什麼意外（至少 30 字）。</small></div>
+      </div>
+      <div class="chips" id="w-surprise"></div>
+      <label class="field">
+        <textarea class="inp" id="w-why" maxlength="300" placeholder="例：我在決策點 1 選了 A，以為對方已讀就算通知到了。看完才發現『已讀』不等於『會照做』，沒有人去確認，停工令就只是一則訊息。"></textarea>
+        <div class="counter" id="w-why-n">0 / 30 字</div>
+      </label>
+    </div>
+
+    <div class="wq">
+      <div class="wq-head"><div class="qnum">2</div>
+        <div class="wq-title">應用：替你們組的一案通活動，設計一條溝通機制<small>先選這條機制屬於哪一種溝通管理，再把空格填完。下方會自動組成一句話。</small></div>
+      </div>
+      <div class="chips" id="w-type"></div>
+      <div class="field-hint" id="w-type-hint" style="margin:-.4rem 0 1rem"></div>
+      <label class="field"><span class="field-label">當什麼事發生時</span>
+        <input class="inp" id="w-when" maxlength="80" placeholder="例：活動當天現場人潮擋住車站主通道"></label>
+      <div class="grid2">
+        <label class="field"><span class="field-label">由誰負責通知</span>
+          <input class="inp" id="w-who" maxlength="40" placeholder="例：現場動線組長"></label>
+        <label class="field"><span class="field-label">通知誰</span>
+          <input class="inp" id="w-whom" maxlength="40" placeholder="例：總召與車站管理窗口"></label>
+        <label class="field"><span class="field-label">透過什麼管道</span>
+          <input class="inp" id="w-channel" maxlength="40" placeholder="例：無線電＋LINE 群組文字紀錄"></label>
+        <label class="field"><span class="field-label">在多久內</span>
+          <input class="inp" id="w-deadline" maxlength="40" placeholder="例：發現後 3 分鐘內"></label>
+      </div>
+      <label class="field"><span class="field-label">怎麼確認對方收到、而且有照做？</span>
+        <input class="inp" id="w-confirm" maxlength="80" placeholder="例：總召口頭複誦指令，10 分鐘後組長回報現場照片">
+        <span class="field-hint">這一格最重要：太魯閣號的停工令「已讀」了，卻沒有人確認有沒有照做。</span></label>
+      <div class="field-label">自動整理的機制</div>
+      <div class="preview" id="w-preview"></div>
+    </div>
+
+    <div class="wq">
+      <div class="wq-head"><div class="qnum">3</div>
+        <div class="wq-title">收穫：用一句話說出你的改變<small>把兩個空格填完。</small></div>
+      </div>
+      <label class="field"><span class="field-label">我以前以為溝通就是……</span>
+        <input class="inp" id="w-before" maxlength="80" placeholder="例：把訊息傳出去"></label>
+      <label class="field"><span class="field-label">現在我知道溝通管理還要……</span>
+        <input class="inp" id="w-after" maxlength="80" placeholder="例：設計好誰負責確認對方真的收到並且行動"></label>
+    </div>
+
+    <div class="err" id="write-err"></div>
+    <div class="btn-row">
+      <button class="btn btn-wh" onclick="show('s-pmbok')">← 回到框架對照</button>
+      <button class="btn btn-or" onclick="finish()">整理成學習卡並送出 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN 9 — CARD（學習卡＋送出狀態）
+══════════════════════════════════════════ -->
+<div class="screen" id="s-card">
+  <div class="panel">
+    <div class="panel-title">我的學習卡</div>
+    <div class="panel-sub">看到綠色的「已送出」才算完成。可以截圖留存。</div>
+    <div class="status wait" id="card-status">送出中…</div>
+    <div class="lcard" id="card"></div>
+    <div class="btn-row">
+      <button class="btn btn-or" id="retry-btn" style="display:none" onclick="submitCard()">重新送出</button>
+      <button class="btn btn-wh" onclick="copyCard()">複製文字</button>
+      <button class="btn btn-db" style="border:1px solid rgba(255,255,255,.2)" onclick="show('s-write')">修改心得</button>
+      <button class="btn btn-db" style="border:1px solid rgba(255,255,255,.2)" onclick="show('s-reflection')">課堂討論題 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="whoami" id="whoami" style="display:none"></div>
+
+<!-- ══════════════════════════════════════════
      JAVASCRIPT
 ══════════════════════════════════════════ -->
+<script src="config.js"></script>
 <script>
 'use strict';
 
@@ -970,7 +1133,7 @@ function renderConsequence(mIdx, cIdx) {
 
 function renderFinal() {
   const c = state.correctCount;
-  document.getElementById('f-score').textContent = c + ' / 5';
+  document.getElementById('f-score').textContent = c + ' / 4';
 
   const colors = ['#C0392B', '#C0392B', '#E8831A', '#E8831A', '#276E48', '#276E48'];
   document.getElementById('f-score').style.color = colors[c] || '#276E48';
@@ -983,7 +1146,7 @@ function renderFinal() {
     '你做出了四個有效決策。你幾乎彌補了所有缺口——但最後一關告訴你，當規劃失敗時，個人的應變能力有其極限。',
     '你在前四個關鍵時刻都做出了正確選擇。現實中，這些決策確實能大幅降低事故發生的機率。但記住：系統需要每個角色都這樣思考，不只是你。'
   ];
-  document.getElementById('f-sublabel').textContent = '正確決策數（共 5 個）';
+  document.getElementById('f-sublabel').textContent = '有效決策數（前 4 關；第 5 關沒有正確答案）';
   document.getElementById('f-msg').textContent = msgs[Math.min(c, 5)];
 }
 
@@ -993,6 +1156,173 @@ function restart() {
   state.role = null;
   show('s-intro');
 }
+
+/* ══════════════════════════════════════════
+   學號、學習心得、學習卡、送到 Google 試算表
+══════════════════════════════════════════ */
+const ENDPOINT = (window.TAROKO_CONFIG && window.TAROKO_CONFIG.endpoint) || '';
+const ROLE_NAMES = { engineer: '台鐵工程司', inspector: '外部督導員', pm: '專案管理師' };
+const MECH_TYPES = [
+  ['規劃溝通', '事前設計：誰在什麼情況、用什麼管道、通知誰（例如緊急通報路徑）'],
+  ['管理溝通', '執行當下：訊息送出後，確認對方收到、理解、而且照做'],
+  ['監視溝通', '持續追蹤：把發現的異常變成有人要處理的行動，必要時往上升級']
+];
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem('taroko0402:' + k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem('taroko0402:' + k, JSON.stringify(v)); } catch { /* 無痕模式略過 */ } }
+};
+const device = store.get('device') || Math.random().toString(16).slice(2, 6);
+store.set('device', device);
+const W = { surprise: '', type: '' };
+let lastPayload = null;
+
+function normSid(v) { return String(v || '').trim().toUpperCase().replace(/\s+/g, ''); }
+
+function post(body) {
+  if (!ENDPOINT) return Promise.reject(new Error('no_endpoint'));
+  // text/plain 避免 CORS 預檢，Apps Script 才收得到
+  return fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+    .then(r => r.json())
+    .then(j => { if (!j.ok) throw new Error(j.error || 'failed'); return j; });
+}
+
+function login() {
+  const a = normSid(document.getElementById('sid').value);
+  const b = normSid(document.getElementById('sid2').value);
+  const err = document.getElementById('login-err');
+  if (!/^[A-Z0-9]{5,12}$/.test(a)) { err.textContent = '學號格式不對：只能有英文字母和數字，5–12 碼。'; return; }
+  if (a !== b) { err.textContent = '兩次輸入的學號不一樣，請再檢查一次。'; return; }
+  err.textContent = '';
+  state.sid = a;
+  store.set('sid', a);
+  const who = document.getElementById('whoami');
+  who.textContent = '學號 ' + a; who.style.display = 'block';
+  post({ type: 'join', sid: a, device }).catch(() => { /* 加入紀錄失敗不影響遊戲，完成時的提交才是成績依據 */ });
+  show('s-role');
+}
+
+function chipGroup(elId, items, key, onPick) {
+  const wrap = document.getElementById(elId);
+  wrap.innerHTML = '';
+  items.forEach(([val, label]) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip' + (W[key] === val ? ' on' : '');
+    b.textContent = label;
+    b.onclick = () => { W[key] = val; chipGroup(elId, items, key, onPick); if (onPick) onPick(val); };
+    wrap.appendChild(b);
+  });
+}
+
+function openWrite() {
+  chipGroup('w-surprise', moments.map((m, i) => [String(i + 1), `決策點 ${i + 1}｜${m.pmbok}`]), 'surprise');
+  chipGroup('w-type', MECH_TYPES.map(([t]) => [t, t]), 'type', showTypeHint);
+  showTypeHint(W.type);
+  updatePreview();
+  show('s-write');
+}
+function showTypeHint(t) {
+  const hit = MECH_TYPES.find(([k]) => k === t);
+  document.getElementById('w-type-hint').textContent = hit ? hit[1] : '規劃＝事前設計；管理＝執行當下確認；監視＝追蹤異常並升級。';
+}
+
+const val = id => document.getElementById(id).value.trim();
+// html=true：給預覽用，輸入先轉義、空格顯示灰色提示；false：純文字，存進試算表
+function mechanismSentence(html) {
+  const f = (id, ph) => (val(id) ? (html ? esc(val(id)) : val(id)) : (html ? `<span class="blank">${ph}</span>` : ph));
+  return `當${f('w-when', '（什麼事發生）')}時，由${f('w-who', '（誰）')}在${f('w-deadline', '（多久內）')}，透過${f('w-channel', '（管道）')}通知${f('w-whom', '（誰）')}，並以「${f('w-confirm', '（確認方式）')}」確認對方收到而且照做。`;
+}
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function updatePreview() {
+  document.getElementById('w-preview').innerHTML = mechanismSentence(true);
+  const n = val('w-why').length;
+  const c = document.getElementById('w-why-n');
+  c.textContent = `${n} / 30 字`; c.className = 'counter' + (n >= 30 ? ' ok' : '');
+}
+document.addEventListener('input', e => { if (e.target.closest && e.target.closest('#s-write')) updatePreview(); });
+
+function finish() {
+  const err = document.getElementById('write-err');
+  const miss = [];
+  if (!W.surprise) miss.push('第 1 題：點選最意外的決策點');
+  if (val('w-why').length < 30) miss.push('第 1 題：原因至少 30 字');
+  if (!W.type) miss.push('第 2 題：選擇機制類型');
+  const blanks = [['w-when', '什麼事發生'], ['w-who', '誰通知'], ['w-whom', '通知誰'], ['w-channel', '管道'], ['w-deadline', '多久內'], ['w-confirm', '確認方式']].filter(([id]) => !val(id)).map(([, n]) => n);
+  if (blanks.length) miss.push('第 2 題還沒填：' + blanks.join('、'));
+  if (!val('w-before') || !val('w-after')) miss.push('第 3 題：兩個空格都要填');
+  if (miss.length) { err.innerHTML = miss.map(esc).join('<br>'); return; }
+  err.textContent = '';
+  if (!state.sid) { show('s-login'); return; }
+
+  lastPayload = {
+    type: 'submit', sid: state.sid, device,
+    role: ROLE_NAMES[state.role] || '',
+    choices: moments.map((m, i) => (state.choices[i] != null ? m.choices[state.choices[i]].label : '')),
+    score: state.correctCount,
+    reflection: {
+      surprise: W.surprise, surpriseWhy: val('w-why'),
+      mechanism: { type: W.type, when: val('w-when'), who: val('w-who'), whom: val('w-whom'), channel: val('w-channel'), deadline: val('w-deadline'), confirm: val('w-confirm'), sentence: mechanismSentence(false) },
+      before: val('w-before'), after: val('w-after')
+    }
+  };
+  renderCard(lastPayload);
+  show('s-card');
+  submitCard();
+}
+
+function renderCard(p) {
+  const r = p.reflection;
+  const decs = moments.map((m, i) => {
+    const c = state.choices[i] != null ? m.choices[state.choices[i]] : null;
+    const cls = i === 4 ? 'dec' : c && c.correct ? 'dec ok' : 'dec no';
+    return `<span class="${cls}">${i + 1}｜${c ? c.label : '—'}${i === 4 ? '' : c && c.correct ? ' ✓' : ' ✗'}</span>`;
+  }).join('');
+  const m = moments[Number(r.surprise) - 1];
+  document.getElementById('card').innerHTML = `
+    <div class="lcard-hdr"><b>太魯閣號 0402｜溝通管理學習卡</b><span>學號 ${esc(p.sid)}｜${esc(p.role || '未選角色')}</span></div>
+    <div class="lcard-sec"><h4>我的決策（前 4 關有效決策 ${p.score} / 4）</h4><div class="dec-row">${decs}</div></div>
+    <div class="lcard-sec"><h4>最意外：決策點 ${esc(r.surprise)}｜${esc(m ? m.pmbok : '')}</h4><p>${esc(r.surpriseWhy)}</p></div>
+    <div class="lcard-sec"><h4>我替一案通設計的溝通機制｜${esc(r.mechanism.type)}</h4><p>${esc(r.mechanism.sentence)}</p></div>
+    <div class="lcard-sec"><h4>一句話收穫</h4><p>我以前以為溝通就是「${esc(r.before)}」，現在我知道溝通管理還要「${esc(r.after)}」。</p></div>`;
+}
+
+function setStatus(cls, text) {
+  const s = document.getElementById('card-status');
+  s.className = 'status ' + cls; s.textContent = text;
+  document.getElementById('retry-btn').style.display = cls === 'bad' ? '' : 'none';
+}
+function submitCard() {
+  if (!lastPayload) return;
+  setStatus('wait', '送出中…請不要關閉這一頁');
+  post(lastPayload)
+    .then(j => { store.set('pending', null); setStatus('ok', `✓ 已送出（${j.time}）。老師已收到你的完成紀錄，可以截圖留存。`); })
+    .catch(e => {
+      store.set('pending', lastPayload);
+      setStatus('bad', e.message === 'no_endpoint'
+        ? '尚未設定送出網址，請告訴老師。內容已暫存在這台手機。'
+        : '送出失敗（可能是網路不穩）。內容已暫存在這台手機，請按「重新送出」。');
+    });
+}
+function copyCard() {
+  const t = document.getElementById('card').innerText;
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+    () => setTimeout(() => alert('已複製學習卡文字'), 0),
+    () => alert('這台裝置不支援自動複製，請直接截圖。'));
+}
+
+// 重新整理頁面後：帶回學號；有未送出的學習卡就直接回到學習卡頁重送
+(function resume() {
+  const sid = store.get('sid');
+  if (sid) { document.getElementById('sid').value = sid; document.getElementById('sid2').value = sid; }
+  const pending = store.get('pending');
+  if (pending && pending.sid) {
+    lastPayload = pending; state.sid = pending.sid;
+    state.correctCount = pending.score;
+    state.choices = pending.choices.map((l, i) => moments[i].choices.findIndex(c => c.label === l)).map(x => (x < 0 ? null : x));
+    renderCard(pending); show('s-card');
+    setStatus('bad', '你上次的學習卡還沒送出成功，請按「重新送出」。');
+  }
+})();
 </script>
 </body>
 </html>
